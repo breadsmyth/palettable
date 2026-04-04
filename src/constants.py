@@ -14,12 +14,17 @@ class Color:
 
 class Context(Enum):
     CREDITS = auto()
-    MAIN = auto()
+    GAMEPLAY = auto()
+    LEVELS = auto()
     SPLASH = auto()
     TITLE = auto()
 
 
+BORDER_MARGIN = 50
+BORDER_WIDTH = 20
+BUTTON_TEXT_SIZE = 35
 FPS = 30
 RESOLUTION = (800, 800)
 TITLE = 'A Very Palettable Game'
+TITLE_TEXT_SIZE = 50
 WINDOW_TITLE = f'{TITLE} (demo)'
