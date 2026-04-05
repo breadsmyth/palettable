@@ -8,6 +8,9 @@ def init():
     global current_context
     current_context = constants.Context.SPLASH
 
+    global current_level
+    current_level = -1
+
     global running
     running = True
 
