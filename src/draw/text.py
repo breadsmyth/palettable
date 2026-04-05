@@ -1,5 +1,4 @@
 import os
-import pygame
 from pygame import freetype
 
 import constants

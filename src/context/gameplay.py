@@ -1,10 +1,8 @@
 import pygame
 
 import constants
-import context.handler
 import game.colors
 import game.paint
-import gamestate
 
 
 CANVAS_WIDTH = 600
@@ -27,11 +25,6 @@ def do(screen):
     screen_size = screen.get_size()
 
     screen.fill(constants.Color.PARCHMENT)
-    # screen.fill(constants.Color.WHITE, pygame.Rect(
-    #     constants.BORDER_MARGIN,
-    #     0,
-    #     screen_size[0] - constants.BORDER_MARGIN*2,
-    #     screen_size[1]))
 
     # calculations for drawing
     area_width = screen_size[0] - 2*constants.BORDER_MARGIN

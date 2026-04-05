@@ -2,7 +2,6 @@ import pygame
 
 import constants
 import draw.sprite
-import game.colors
 
 
 class Colorable:
