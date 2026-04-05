@@ -1,6 +1,7 @@
 import pygame
 
 import constants
+import context.handler
 import draw.helpers
 import draw.text
 import game.button
@@ -34,6 +35,15 @@ def init():
             create_closure(),
             constants.Context.LEVELS))
     
+    global BACK_BUTTON
+    def back_onclick():
+        context.handler.change_context(constants.Context.TITLE)
+    
+    BACK_BUTTON = game.button.TextButton(
+        draw.text.Text('Back', constants.BUTTON_TEXT_SIZE),
+        back_onclick,
+        constants.Context.LEVELS)
+    
 
 def do(screen):
     draw.helpers.screen_border(screen)
@@ -51,3 +61,18 @@ def do(screen):
             300 + 4*constants.BUTTON_TEXT_SIZE * (i//row_length),
             constants.BUTTON_TEXT_SIZE*2,
             constants.BUTTON_TEXT_SIZE*2))
+    
+    screen_size = screen.get_size()
+
+    button_width = min(
+        screen_size[0] - (constants.BORDER_MARGIN*3 + constants.BORDER_WIDTH)*2,
+        800)
+    button_left = (screen_size[0] - button_width) // 2
+    button_bottom = screen_size[1] - (constants.BORDER_MARGIN*2 + constants.BORDER_WIDTH)
+    button_height = constants.BUTTON_TEXT_SIZE * 2
+
+    BACK_BUTTON.draw(screen, pygame.Rect(
+        button_left,
+        button_bottom - button_height,
+        button_width,
+        button_height))
