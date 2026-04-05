@@ -23,6 +23,7 @@ class Context(Enum):
 BORDER_MARGIN = 50
 BORDER_WIDTH = 20
 BUTTON_TEXT_SIZE = 35
+DROPLET_SIZE = 80
 FPS = 30
 RESOLUTION = (800, 800)
 TITLE = 'A Very Palettable Game'
