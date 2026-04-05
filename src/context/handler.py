@@ -1,5 +1,5 @@
 import constants
-from context import credits, gameplay, level_select, splash, title
+from context import credits_screen, gameplay, level_select, splash, title
 import gamestate
 
 
@@ -10,7 +10,7 @@ def change_context(new_context):
 def handle(screen):
     match gamestate.current_context:
         case constants.Context.CREDITS:
-            credits.do(screen)
+            credits_screen.do(screen)
         case constants.Context.GAMEPLAY:
             gameplay.do(screen)
         case constants.Context.LEVELS:
@@ -25,7 +25,7 @@ def init():
     for context in constants.Context:
         gamestate.clickables[context] = []
 
-    credits.init()
+    credits_screen.init()
     gameplay.init()
     level_select.init()
     splash.init()
