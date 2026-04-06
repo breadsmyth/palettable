@@ -1,13 +1,28 @@
 import pygame
 
 import constants
+import draw.helpers
+import draw.text
 import game.colors
 import game.paint
+import gamestate
 
 
 CANVAS_WIDTH = 600
+PALETTE_WIDTH = 600 + 1
+PALETTE_HEIGHT = 240 + 1
 
 def init():
+    global TITLE_TEXTS
+    TITLE_TEXTS = []
+
+    for i in range(1, constants.NUM_LEVELS+1):
+        text = draw.text.Text(
+            f'Level {i}',
+            constants.TITLE_TEXT_SIZE)
+
+        TITLE_TEXTS.append(text)
+
     global BUBBLE_CYAN
     BUBBLE_CYAN = game.paint.Bubble(game.colors.CMYK(100, 0, 0, 0))
 
@@ -25,12 +40,17 @@ def do(screen):
     screen_size = screen.get_size()
 
     screen.fill(constants.Color.PARCHMENT)
+    screen.fill(constants.Color.WHITE, pygame.Rect(
+        constants.BORDER_MARGIN,
+        0,
+        screen_size[0] - 2*constants.BORDER_MARGIN,
+        screen_size[1]))
 
     # calculations for drawing
     area_width = screen_size[0] - 2*constants.BORDER_MARGIN
     area_left = constants.BORDER_MARGIN
 
-    canvas_top = 0
+    canvas_top = (screen_size[1] * 2) // 10
     paint_top = (screen_size[1] * 7) // 10
     palette_top = (screen_size[1] * 8) // 10
 
@@ -42,6 +62,8 @@ def do(screen):
     surf_canvas = pygame.Surface((area_width, canvas_height))
     do_canvas(surf_canvas)
     screen.blit(surf_canvas, (area_left, canvas_top))
+
+    draw.helpers.title_text(screen, TITLE_TEXTS[gamestate.current_level - 1])
 
     surf_paint = pygame.Surface((area_width, paint_height))
     do_paint(surf_paint)
@@ -84,3 +106,12 @@ def do_paint(surf):
 def do_palette(surf):
     area_size = surf.get_size()
     surf.fill(constants.Color.WHITE)
+
+    palette_left = (area_size[0] - PALETTE_WIDTH) // 2 - 1
+    palette_top = (area_size[1] - PALETTE_HEIGHT) // 2 - 1
+
+    surf.fill(constants.Color.BLACK, pygame.Rect(
+        palette_left,
+        palette_top,
+        PALETTE_WIDTH,
+        PALETTE_HEIGHT))

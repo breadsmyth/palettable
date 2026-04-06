@@ -8,7 +8,6 @@ import game.button
 import gamestate
 
 
-num_levels = 40
 row_length = 5
 
 def select(level_num):
@@ -23,12 +22,12 @@ def init():
     global BACK_BUTTON
     BACK_BUTTON = draw.helpers.create_back_button(
         current_context=constants.Context.LEVELS,
-        prev_context=constants.Context.TITLE)    
+        prev_context=constants.Context.TITLE)
 
     global LEVEL_BUTTONS
     LEVEL_BUTTONS = []
 
-    for i in range(1, num_levels+1):
+    for i in range(1, constants.NUM_LEVELS+1):
         text = draw.text.Text(
             str(i),
             constants.BUTTON_TEXT_SIZE)
