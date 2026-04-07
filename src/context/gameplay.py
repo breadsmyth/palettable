@@ -5,12 +5,14 @@ import draw.helpers
 import draw.text
 import game.colors
 import game.paint
+import game.palette
 import gamestate
 
 
 CANVAS_WIDTH = 600
-PALETTE_WIDTH = 600 + 1
-PALETTE_HEIGHT = 240 + 1
+PALETTE_SQUARE_HEIGHT = 120
+PALETTE_WIDTH = PALETTE_SQUARE_HEIGHT*5 + 1
+PALETTE_HEIGHT = PALETTE_SQUARE_HEIGHT*2 + 1
 
 def init():
     global TITLE_TEXTS
@@ -35,6 +37,27 @@ def init():
     global BUBBLE_KEY
     BUBBLE_KEY = game.paint.Bubble(game.colors.CMYK(0, 0, 0, 100))
 
+    global palette_squares
+    palette_squares = []
+
+    def palette_onclick(palette_num):
+        print(f'Clicked palette {palette_num}!')
+
+    for i in range(10):
+        def create_closure(palette_num=i):
+            def onclick():
+                palette_onclick(palette_num)
+            return onclick
+
+        palette_squares.append(game.palette.PaletteSquare(
+            pygame.Rect(
+                0,
+                0,
+                PALETTE_SQUARE_HEIGHT-1,
+                PALETTE_SQUARE_HEIGHT-1),
+            create_closure(),
+            constants.Context.GAMEPLAY))
+
 
 def do(screen):
     screen_size = screen.get_size()
@@ -56,7 +79,6 @@ def do(screen):
 
     canvas_height = paint_top
     paint_height = palette_top - canvas_height
-    palette_height = paint_height * 2
     
     # draw the surfaces
     surf_canvas = pygame.Surface((area_width, canvas_height))
@@ -69,9 +91,23 @@ def do(screen):
     do_paint(surf_paint)
     screen.blit(surf_paint, (area_left, paint_top))
 
-    surf_palette = pygame.Surface((area_width, palette_height))
-    do_palette(surf_palette)
-    screen.blit(surf_palette, (area_left, palette_top))
+    palette_left = area_left + (area_width - PALETTE_WIDTH) // 2 - 1
+    palette_top = palette_top + (paint_height*2 - PALETTE_HEIGHT) // 2 - 1
+
+    # Draw black backdrop for the palette
+    screen.fill(constants.Color.BLACK, pygame.Rect(
+        palette_left,
+        palette_top,
+        PALETTE_WIDTH,
+        PALETTE_HEIGHT))
+
+    # Draw squares on top
+    for i, square in enumerate(palette_squares):
+        square.draw(screen, pygame.Rect(
+            palette_left+1 + (i%5) * PALETTE_SQUARE_HEIGHT,
+            palette_top+1 + (i//5) * PALETTE_SQUARE_HEIGHT,
+            PALETTE_SQUARE_HEIGHT-1,
+            PALETTE_SQUARE_HEIGHT-1))
 
 
 def do_canvas(surf):
@@ -101,17 +137,3 @@ def do_paint(surf):
     BUBBLE_MAGENTA.draw(surf, (paint_left + (constants.COLORABLE_SIZE + gap_width), paint_top))
     BUBBLE_YELLOW.draw(surf, (paint_left + (constants.COLORABLE_SIZE + gap_width)*2, paint_top))
     BUBBLE_KEY.draw(surf, (paint_left + (constants.COLORABLE_SIZE + gap_width)*3, paint_top))
-
-
-def do_palette(surf):
-    area_size = surf.get_size()
-    surf.fill(constants.Color.WHITE)
-
-    palette_left = (area_size[0] - PALETTE_WIDTH) // 2 - 1
-    palette_top = (area_size[1] - PALETTE_HEIGHT) // 2 - 1
-
-    surf.fill(constants.Color.BLACK, pygame.Rect(
-        palette_left,
-        palette_top,
-        PALETTE_WIDTH,
-        PALETTE_HEIGHT))
